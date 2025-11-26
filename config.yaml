@@ -1,0 +1,15 @@
+models:
+  qwen3_0.6b:
+    hf_name: "Qwen/Qwen3-0.6B"
+    thinking_mode: "disable"  # use enable_thinking=False
+
+  qwen3_4b:
+    hf_name: "Qwen/Qwen3-4B"
+    thinking_mode: "disable"
+
+  deepseek_r1_8b:
+    hf_name: "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
+    thinking_mode: "strip"  # allow thinking, strip <think>...</think> before judging
+
+dataset:
+  use_full: true  # true = 4000 questions (get_full_dataset), false = 1000 (get_dataset)
