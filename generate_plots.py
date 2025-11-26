@@ -108,9 +108,12 @@ data_smooth = zoom(data, (20, 10), order=3)
 data_smooth = gaussian_filter(data_smooth, sigma=2)
 
 # Plot with jet colormap like reference
+# Dynamic color range based on data
+data_min = max(45, data.min() - 5)
+data_max = min(100, data.max() + 5)
 im = ax.imshow(data_smooth, aspect='auto', cmap='jet',
                extent=[0, num_layers, len(methods) - 0.5, -0.5],
-               vmin=55, vmax=75)
+               vmin=data_min, vmax=data_max)
 
 ax.set_xlabel('Layer', fontsize=14)
 ax.set_ylabel('Extraction Method', fontsize=14)
@@ -152,13 +155,19 @@ for method, label, color, marker in zip(methods, method_labels, colors, markers)
                 xy=(layers[best_idx], test_accs[best_idx]),
                 xytext=(5, 5), textcoords='offset points', fontsize=10, fontweight='bold')
 
-ax.axhline(y=60, color='gray', linestyle='--', alpha=0.5, label='Random (60%)')
+ax.axhline(y=50, color='gray', linestyle='--', alpha=0.5, label='Random (50%)')
 ax.set_xlabel('Layer', fontsize=14)
 ax.set_ylabel('Test Accuracy (%)', fontsize=14)
 ax.set_title('Probe Accuracy Across Layers', fontsize=14, fontweight='bold')
 ax.legend(loc='lower right', fontsize=11)
 ax.set_xlim(-0.5, num_layers + 0.5)
-ax.set_ylim(54, 78)
+# Dynamic y-axis based on actual data
+all_test_accs = []
+for method in methods:
+    all_test_accs.extend([r['test_acc'] * 100 for r in probe_data['all_results'][method]['layer_results']])
+y_min = max(45, min(all_test_accs) - 5)
+y_max = min(100, max(all_test_accs) + 5)
+ax.set_ylim(y_min, y_max)
 ax.grid(True, alpha=0.3)
 
 save_fig(fig, str(PLOTS_DIR / '02_layer_lines.png'))
@@ -177,32 +186,31 @@ accuracies = [steering_results[a]['correct'] / steering_results[a]['total'] * 10
 ax.plot(alphas, accuracies, '-o', color='#8e44ad', linewidth=3, markersize=12,
         markerfacecolor='white', markeredgewidth=2.5)
 
-# Annotate each point
-for a, acc in zip(alphas, accuracies):
-    offset = 5 if acc < 45 else -8
-    ax.text(a, acc + offset, f'{acc:.1f}%', ha='center', fontsize=10, fontweight='bold')
+# Annotate each point (skip if too crowded)
+for i, (a, acc) in enumerate(zip(alphas, accuracies)):
+    # Only annotate if not overlapping with previous
+    if i == 0 or abs(acc - accuracies[i-1]) > 3:
+        offset = 3
+        ax.text(a, acc + offset, f'{acc:.1f}%', ha='center', fontsize=9, fontweight='bold')
 
 # Mark optimal
 best_idx = np.argmax(accuracies)
 ax.scatter([alphas[best_idx]], [accuracies[best_idx]],
            color='#27ae60', s=300, zorder=5, edgecolors='black', linewidth=2, marker='*')
 
-# Colored zones
-ax.axvspan(-2, 15, alpha=0.15, color='yellow', label='Under-steering')
-ax.axvspan(15, 25, alpha=0.2, color='green', label='Optimal')
-ax.axvspan(25, 45, alpha=0.15, color='orange', label='Over-steering')
-ax.axvspan(45, 102, alpha=0.15, color='red', label='Broken')
-
 # Baseline
 ax.axhline(y=accuracies[0], color='red', linestyle='--', linewidth=2, alpha=0.7)
-ax.text(90, accuracies[0] + 2, 'Baseline', fontsize=10, color='red')
 
 ax.set_xlabel('Steering Strength (α)', fontsize=14)
 ax.set_ylabel('Accuracy (%)', fontsize=14)
 ax.set_title('Intervention: Steering Curve', fontsize=14, fontweight='bold')
-ax.set_xlim(-5, 105)
-ax.set_ylim(0, 65)
+max_alpha = max(alphas)
+ax.set_xlim(-5, max_alpha + 10)
+ax.set_ylim(0, max(max(accuracies) + 10, 80))
 ax.grid(True, alpha=0.3)
+
+# Add baseline label inside plot area
+ax.text(max_alpha * 0.7, accuracies[0] + 2, 'Baseline', fontsize=10, color='red')
 
 save_fig(fig, str(PLOTS_DIR / '03_steering_curve.png'))
 
@@ -214,8 +222,17 @@ print("4. Before/after intervention...")
 
 fig, ax = plt.subplots(figsize=(8, 6))
 
-categories = ['Baseline (α=0)', 'Optimal (α=20)']
-values = [12.5, 53.75]
+# Calculate actual values from data
+alphas = sorted(steering_results.keys())
+accuracies = [steering_results[a]['correct'] / steering_results[a]['total'] * 100 for a in alphas]
+baseline_acc = accuracies[0]
+best_idx = np.argmax(accuracies)
+best_alpha = alphas[best_idx]
+best_acc = accuracies[best_idx]
+improvement = best_acc - baseline_acc
+
+categories = [f'Baseline (α=0)', f'Optimal (α={int(best_alpha)})']
+values = [baseline_acc, best_acc]
 colors = ['#e74c3c', '#27ae60']
 
 bars = ax.bar(categories, values, color=colors, edgecolor='black', linewidth=2, width=0.5)
@@ -225,13 +242,15 @@ for bar, val in zip(bars, values):
             f'{val:.1f}%', ha='center', fontsize=16, fontweight='bold')
 
 # Arrow showing improvement
-ax.annotate('', xy=(1, 48), xytext=(0, 16),
+arrow_y_start = baseline_acc + 4
+arrow_y_end = best_acc - 4
+ax.annotate('', xy=(1, arrow_y_end), xytext=(0, arrow_y_start),
             arrowprops=dict(arrowstyle='->', color='black', lw=3))
-ax.text(0.5, 30, '+41.3%', ha='center', fontsize=20, fontweight='bold', color='#27ae60')
+ax.text(0.5, (baseline_acc + best_acc) / 2, f'+{improvement:.1f}%', ha='center', fontsize=20, fontweight='bold', color='#27ae60')
 
 ax.set_ylabel('Accuracy (%)', fontsize=14)
 ax.set_title('Sycophancy Reduction via Steering', fontsize=14, fontweight='bold')
-ax.set_ylim(0, 70)
+ax.set_ylim(0, max(best_acc + 15, 70))
 
 save_fig(fig, str(PLOTS_DIR / '04_intervention_bars.png'))
 
@@ -254,14 +273,14 @@ for bar, acc, layer in zip(bars, best_accs, best_layers):
     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 1,
             f'{acc:.1f}%\n(Layer {layer})', ha='center', fontsize=12, fontweight='bold')
 
-ax.axhline(y=60, color='gray', linestyle='--', linewidth=2, alpha=0.7)
-ax.text(2.4, 61, 'Random', fontsize=11, color='gray')
+ax.axhline(y=50, color='gray', linestyle='--', linewidth=2, alpha=0.7)
+ax.text(2.4, 51, 'Random', fontsize=11, color='gray')
 
 ax.set_xticks(x)
 ax.set_xticklabels(method_labels, fontsize=12)
 ax.set_ylabel('Test Accuracy (%)', fontsize=14)
 ax.set_title('Best Probe Accuracy by Extraction Method', fontsize=14, fontweight='bold')
-ax.set_ylim(0, 85)
+ax.set_ylim(0, max(best_accs) + 10)
 
 save_fig(fig, str(PLOTS_DIR / '05_detection_bars.png'))
 
@@ -335,17 +354,25 @@ print("8. Individual method heatmaps...")
 
 fig, axes = plt.subplots(1, 3, figsize=(14, 8), sharey=True)
 
+# Get overall min/max for consistent coloring
+all_accs_heatmap = []
+for method in methods:
+    all_accs_heatmap.extend([r['test_acc'] * 100 for r in probe_data['all_results'][method]['layer_results']])
+heatmap_vmin = max(45, min(all_accs_heatmap) - 5)
+heatmap_vmax = min(100, max(all_accs_heatmap) + 5)
+
 for idx, (method, label) in enumerate(zip(methods, method_labels)):
     ax = axes[idx]
 
     layer_results = probe_data['all_results'][method]['layer_results']
     accs = np.array([r['test_acc'] * 100 for r in layer_results]).reshape(-1, 1)
 
-    im = ax.imshow(accs, cmap='RdYlGn', aspect='auto', vmin=55, vmax=75)
+    im = ax.imshow(accs, cmap='RdYlGn', aspect='auto', vmin=heatmap_vmin, vmax=heatmap_vmax)
 
     # Annotate each cell
+    mid_val = (heatmap_vmin + heatmap_vmax) / 2
     for i, acc in enumerate(accs.flatten()):
-        color = 'white' if acc < 62 or acc > 70 else 'black'
+        color = 'white' if acc < mid_val - 5 or acc > mid_val + 5 else 'black'
         ax.text(0, i, f'{acc:.1f}', ha='center', va='center', fontsize=8, color=color)
 
     best_layer = probe_data['all_results'][method]['best_layer']
@@ -383,10 +410,10 @@ ax.bar(['Last\nPrompt', 'Last\nResponse', 'Mean\nResponse'], best_accs,
        color=colors, edgecolor='black', linewidth=1.5)
 for i, acc in enumerate(best_accs):
     ax.text(i, acc + 1, f'{acc:.1f}%', ha='center', fontsize=11, fontweight='bold')
-ax.axhline(y=60, color='gray', linestyle='--', alpha=0.6)
+ax.axhline(y=50, color='gray', linestyle='--', alpha=0.6)
 ax.set_ylabel('Test Accuracy (%)', fontsize=11)
 ax.set_title('A) Detection Accuracy', fontsize=12, fontweight='bold')
-ax.set_ylim(0, 82)
+ax.set_ylim(0, max(best_accs) + 10)
 
 # B: Best layers
 ax = axes[0, 1]
@@ -397,7 +424,7 @@ for i, layer in enumerate(best_layers):
     ax.text(i, layer + 0.5, f'L{layer}', ha='center', fontsize=11, fontweight='bold')
 ax.set_ylabel('Layer', fontsize=11)
 ax.set_title('B) Best Layer per Method', fontsize=12, fontweight='bold')
-ax.set_ylim(0, 28)
+ax.set_ylim(0, num_layers + 2)
 
 # C: Steering curve
 ax = axes[1, 0]
@@ -411,28 +438,41 @@ ax.axhline(y=accuracies[0], color='#e74c3c', linestyle='--', alpha=0.6)
 ax.set_xlabel('Alpha (α)', fontsize=11)
 ax.set_ylabel('Accuracy (%)', fontsize=11)
 ax.set_title('C) Steering Curve', fontsize=12, fontweight='bold')
-ax.set_xlim(-5, 105)
-ax.set_ylim(0, 60)
+max_alpha_summary = max(alphas)
+ax.set_xlim(-5, max_alpha_summary + 10)
+ax.set_ylim(0, max(max(accuracies) + 10, 80))
 ax.grid(True, alpha=0.3)
 
 # D: Key results text
 ax = axes[1, 1]
 ax.axis('off')
-text = """KEY RESULTS
+
+# Calculate actual values
+best_method_name = probe_data['best_method'].replace('_', ' ').title()
+best_test_acc = probe_data['best_test_acc'] * 100
+best_layer_num = probe_data['best_layer']
+vs_random = best_test_acc - 60
+
+sparse_weights = probe_data['sparse_probe'].coef_[0]
+active_neurons = np.sum(np.abs(sparse_weights) > 1e-6)
+total_neurons = len(sparse_weights)
+sparsity_pct = 100 * active_neurons / total_neurons
+
+text = f"""KEY RESULTS
 
 DETECTION
-• Best Method: Mean Response
-• Best Accuracy: 73.5%
-• Best Layer: 15
-• vs Random: +13.5%
+• Best Method: {best_method_name}
+• Best Accuracy: {best_test_acc:.1f}%
+• Best Layer: {best_layer_num}
+• vs Random: +{vs_random:.1f}%
 
 INTERVENTION
-• Optimal α: 20
-• Improvement: +41.3%
-  (12.5% → 53.8%)
+• Optimal α: {int(best_alpha)}
+• Improvement: +{improvement:.1f}%
+  ({baseline_acc:.1f}% → {best_acc:.1f}%)
 
 SPARSE PROBE
-• Active neurons: 180/1024 (17.6%)
+• Active neurons: {active_neurons}/{total_neurons} ({sparsity_pct:.1f}%)
 • Interpretable direction found
 """
 ax.text(0.1, 0.95, text, transform=ax.transAxes, fontsize=12,
@@ -456,8 +496,12 @@ ax.set_xlim(0, 16)
 ax.set_ylim(0, 4)
 ax.axis('off')
 
+# Get dataset size from judged file
+with open(OUTPUT_DIR / "sycophancy_judged.csv", "r", encoding="utf-8") as f:
+    n_dataset = sum(1 for _ in f) - 1  # subtract header
+
 boxes = [
-    (1.2, 'Dataset\n(1000 examples)', '#3498db'),
+    (1.2, f'Dataset\n({n_dataset} examples)', '#3498db'),
     (3.5, 'Generate\nResponses', '#9b59b6'),
     (5.8, 'LLM\nJudge', '#e67e22'),
     (8.1, 'Extract\nHidden States', '#1abc9c'),
@@ -651,7 +695,7 @@ ax.set_ylim(0, 10)
 ax.axis('off')
 
 # Input layer (left)
-ax.text(1, 5, 'Hidden\nState\n(L15)', ha='center', va='center', fontsize=12, fontweight='bold',
+ax.text(1, 5, f'Hidden\nState\n(L{best_layer})', ha='center', va='center', fontsize=12, fontweight='bold',
         bbox=dict(boxstyle='round,pad=0.5', facecolor='#3498db', edgecolor='black', linewidth=2))
 
 # Top pro-sycophancy neurons (middle-top)
@@ -728,7 +772,7 @@ scatter = ax.scatter(pca_result[:, 0], pca_result[:, 1], c=all_labels,
                      cmap='RdYlGn_r', alpha=0.5, s=20)
 ax.set_xlabel(f'PC1 ({pca.explained_variance_ratio_[0]*100:.1f}%)', fontsize=11)
 ax.set_ylabel(f'PC2 ({pca.explained_variance_ratio_[1]*100:.1f}%)', fontsize=11)
-ax.set_title('PCA of Hidden States (Layer 15)', fontsize=12, fontweight='bold')
+ax.set_title(f'PCA of Hidden States (Layer {best_layer})', fontsize=12, fontweight='bold')
 # Custom legend
 from matplotlib.lines import Line2D
 leg_elements = [Line2D([0], [0], marker='o', color='w', markerfacecolor='#d62728',
@@ -794,7 +838,7 @@ scatter = ax.scatter(tsne_result[:, 0], tsne_result[:, 1], c=tsne_labels,
 
 ax.set_xlabel('t-SNE 1', fontsize=12)
 ax.set_ylabel('t-SNE 2', fontsize=12)
-ax.set_title('t-SNE Visualization of Hidden States (Layer 15)', fontsize=14, fontweight='bold')
+ax.set_title(f't-SNE Visualization of Hidden States (Layer {best_layer})', fontsize=14, fontweight='bold')
 
 # Custom legend
 from matplotlib.lines import Line2D
@@ -900,8 +944,12 @@ print("19. Layer progression...")
 
 fig, axes = plt.subplots(2, 4, figsize=(18, 10))
 
-# Show PCA at different layers
-layers_to_show = [0, 4, 8, 12, 15, 20, 24, 28]
+# Show PCA at different layers (dynamically based on model)
+layer_step = max(1, num_layers // 7)
+layers_to_show = [0] + list(range(layer_step, num_layers, layer_step))[:6] + [num_layers]
+layers_to_show = layers_to_show[:8]  # Ensure max 8 layers
+
+n_samples_hs = biased_all.shape[0]
 
 for idx, layer in enumerate(layers_to_show):
     ax = axes[idx // 4, idx % 4]
@@ -913,9 +961,9 @@ for idx, layer in enumerate(layers_to_show):
     pca_layer = PCA(n_components=2)
     pca_result_layer = pca_layer.fit_transform(layer_all)
 
-    ax.scatter(pca_result_layer[:1000, 0], pca_result_layer[:1000, 1],
+    ax.scatter(pca_result_layer[:n_samples_hs, 0], pca_result_layer[:n_samples_hs, 1],
                c='#d62728', alpha=0.3, s=10, label='Syco')
-    ax.scatter(pca_result_layer[1000:, 0], pca_result_layer[1000:, 1],
+    ax.scatter(pca_result_layer[n_samples_hs:, 0], pca_result_layer[n_samples_hs:, 1],
                c='#2ca02c', alpha=0.3, s=10, label='Non-Syco')
 
     ax.set_title(f'Layer {layer}', fontsize=11, fontweight='bold')

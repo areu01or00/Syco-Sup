@@ -1,0 +1,83 @@
+============================================================
+Script: generate_plots.py
+Model: qwen3_4b
+Started: 2025-11-26T16:34:02.830711
+Full dataset: True
+============================================================
+
+[2025-11-26 16:34:55] Loading data...
+[2025-11-26 16:34:55] 1. Smooth layer heatmap...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/01_layer_heatmap.png
+[2025-11-26 16:34:55] 2. Layer accuracy lines...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/02_layer_lines.png
+[2025-11-26 16:34:55] 3. Steering curve...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/03_steering_curve.png
+[2025-11-26 16:34:55] 4. Before/after intervention...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/04_intervention_bars.png
+[2025-11-26 16:34:55] 5. Detection comparison...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/05_detection_bars.png
+[2025-11-26 16:34:55] 6. Train vs test...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/06_train_vs_test.png
+[2025-11-26 16:34:55] 7. Top neurons...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/07_neurons.png
+[2025-11-26 16:34:55] 8. Individual method heatmaps...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/08_method_heatmaps.png
+[2025-11-26 16:34:55] 9. Summary infographic...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/09_summary.png
+[2025-11-26 16:34:55] 10. Pipeline diagram...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/10_pipeline.png
+[2025-11-26 16:34:55] 11. Neuron activation patterns...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/11_neuron_activations.png
+[2025-11-26 16:34:55] 12. Weight distribution...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/12_weight_distribution.png
+[2025-11-26 16:34:55] 13. Layer-neuron heatmap...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/13_layer_neuron_heatmap.png
+[2025-11-26 16:34:55] 14. Circuit diagram...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/14_circuit_diagram.png
+[2025-11-26 16:34:55] 15. PCA visualization...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/15_pca_visualization.png
+[2025-11-26 16:34:55] 16. t-SNE visualization...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/16_tsne_visualization.png
+[2025-11-26 16:34:55] 17. Probe direction visualization...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/17_probe_direction.png
+[2025-11-26 16:34:55] 18. Confidence distribution...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/18_confidence_distribution.png
+[2025-11-26 16:34:55] 19. Layer progression...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/19_layer_progression.png
+[2025-11-26 16:34:55] 20. Extraction method comparison...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/20_method_comparison.png
+[2025-11-26 16:34:55] 21. ROC curve...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/21_roc_pr_curves.png
+[2025-11-26 16:34:55] 22. Confusion matrix...
+[2025-11-26 16:34:55]   Saved: /root/Syco-Sup/results/qwen3_4b/plots/22_confusion_matrix.png
+[2025-11-26 16:34:55] 
+[2025-11-26 16:34:55] ========================================
+[2025-11-26 16:34:55] ALL 22 PLOTS GENERATED!
+[2025-11-26 16:34:55] ========================================
+[2025-11-26 16:34:55]   01_layer_heatmap.png
+[2025-11-26 16:34:55]   02_layer_lines.png
+[2025-11-26 16:34:55]   03_steering_curve.png
+[2025-11-26 16:34:55]   04_intervention_bars.png
+[2025-11-26 16:34:55]   05_detection_bars.png
+[2025-11-26 16:34:55]   06_train_vs_test.png
+[2025-11-26 16:34:55]   07_neurons.png
+[2025-11-26 16:34:55]   08_method_heatmaps.png
+[2025-11-26 16:34:55]   09_summary.png
+[2025-11-26 16:34:55]   10_pipeline.png
+[2025-11-26 16:34:55]   11_neuron_activations.png
+[2025-11-26 16:34:55]   12_weight_distribution.png
+[2025-11-26 16:34:55]   13_layer_neuron_heatmap.png
+[2025-11-26 16:34:55]   14_circuit_diagram.png
+[2025-11-26 16:34:55]   15_pca_visualization.png
+[2025-11-26 16:34:55]   16_tsne_visualization.png
+[2025-11-26 16:34:55]   17_probe_direction.png
+[2025-11-26 16:34:55]   18_confidence_distribution.png
+[2025-11-26 16:34:55]   19_layer_progression.png
+[2025-11-26 16:34:55]   20_method_comparison.png
+[2025-11-26 16:34:55]   21_roc_pr_curves.png
+[2025-11-26 16:34:55]   22_confusion_matrix.png
+
+============================================================
+Finished: 2025-11-26T16:34:56.136424
+Exit code: 0
+============================================================

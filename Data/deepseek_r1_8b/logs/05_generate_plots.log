@@ -1,0 +1,83 @@
+============================================================
+Script: generate_plots.py
+Model: deepseek_r1_8b
+Started: 2025-11-26T18:35:24.606777
+Full dataset: True
+============================================================
+
+[2025-11-26 18:36:06] Loading data...
+[2025-11-26 18:36:06] 1. Smooth layer heatmap...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/01_layer_heatmap.png
+[2025-11-26 18:36:06] 2. Layer accuracy lines...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/02_layer_lines.png
+[2025-11-26 18:36:06] 3. Steering curve...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/03_steering_curve.png
+[2025-11-26 18:36:06] 4. Before/after intervention...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/04_intervention_bars.png
+[2025-11-26 18:36:06] 5. Detection comparison...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/05_detection_bars.png
+[2025-11-26 18:36:06] 6. Train vs test...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/06_train_vs_test.png
+[2025-11-26 18:36:06] 7. Top neurons...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/07_neurons.png
+[2025-11-26 18:36:06] 8. Individual method heatmaps...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/08_method_heatmaps.png
+[2025-11-26 18:36:06] 9. Summary infographic...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/09_summary.png
+[2025-11-26 18:36:06] 10. Pipeline diagram...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/10_pipeline.png
+[2025-11-26 18:36:06] 11. Neuron activation patterns...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/11_neuron_activations.png
+[2025-11-26 18:36:06] 12. Weight distribution...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/12_weight_distribution.png
+[2025-11-26 18:36:06] 13. Layer-neuron heatmap...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/13_layer_neuron_heatmap.png
+[2025-11-26 18:36:06] 14. Circuit diagram...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/14_circuit_diagram.png
+[2025-11-26 18:36:06] 15. PCA visualization...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/15_pca_visualization.png
+[2025-11-26 18:36:06] 16. t-SNE visualization...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/16_tsne_visualization.png
+[2025-11-26 18:36:06] 17. Probe direction visualization...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/17_probe_direction.png
+[2025-11-26 18:36:06] 18. Confidence distribution...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/18_confidence_distribution.png
+[2025-11-26 18:36:06] 19. Layer progression...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/19_layer_progression.png
+[2025-11-26 18:36:06] 20. Extraction method comparison...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/20_method_comparison.png
+[2025-11-26 18:36:06] 21. ROC curve...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/21_roc_pr_curves.png
+[2025-11-26 18:36:06] 22. Confusion matrix...
+[2025-11-26 18:36:06]   Saved: /root/Syco-Sup/results/deepseek_r1_8b/plots/22_confusion_matrix.png
+[2025-11-26 18:36:06] 
+[2025-11-26 18:36:06] ========================================
+[2025-11-26 18:36:06] ALL 22 PLOTS GENERATED!
+[2025-11-26 18:36:06] ========================================
+[2025-11-26 18:36:06]   01_layer_heatmap.png
+[2025-11-26 18:36:06]   02_layer_lines.png
+[2025-11-26 18:36:06]   03_steering_curve.png
+[2025-11-26 18:36:06]   04_intervention_bars.png
+[2025-11-26 18:36:06]   05_detection_bars.png
+[2025-11-26 18:36:06]   06_train_vs_test.png
+[2025-11-26 18:36:06]   07_neurons.png
+[2025-11-26 18:36:06]   08_method_heatmaps.png
+[2025-11-26 18:36:06]   09_summary.png
+[2025-11-26 18:36:06]   10_pipeline.png
+[2025-11-26 18:36:06]   11_neuron_activations.png
+[2025-11-26 18:36:06]   12_weight_distribution.png
+[2025-11-26 18:36:06]   13_layer_neuron_heatmap.png
+[2025-11-26 18:36:06]   14_circuit_diagram.png
+[2025-11-26 18:36:06]   15_pca_visualization.png
+[2025-11-26 18:36:06]   16_tsne_visualization.png
+[2025-11-26 18:36:06]   17_probe_direction.png
+[2025-11-26 18:36:06]   18_confidence_distribution.png
+[2025-11-26 18:36:06]   19_layer_progression.png
+[2025-11-26 18:36:06]   20_method_comparison.png
+[2025-11-26 18:36:06]   21_roc_pr_curves.png
+[2025-11-26 18:36:06]   22_confusion_matrix.png
+
+============================================================
+Finished: 2025-11-26T18:36:06.983999
+Exit code: 0
+============================================================
