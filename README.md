@@ -4,9 +4,6 @@ This project investigates whether sycophancy, the tendency of language models to
 
 This project aims to develop a model-agnostic framework, specifically targeting Small Language Models, to supress sycophancy without additional RLHF/training. 
 
-## Preface
-
-This project was motivated by the intuition that there are specific layers in Language Models which influence sycophancy. It began with a discussion with [@teortaxesTex](https://x.com/teortaxesTex) as referenced in this [Twitter thread](https://x.com/teortaxesTex/status/1928468034336813158?s=20).
 
 ![Sycophancy Reduction](Data/qwen3_0.6b/plots/04_intervention_bars.png)
 
